@@ -1,0 +1,91 @@
+{extends file="base.html"}
+
+{block name="head"}
+<div class="bgWrap" id="head">
+    <div class="wrap">
+        <div class="logo"><span><a href="{call index_link}" title="{setting('site_title')}"><img src="{$absroot}{setting('logo')}" alt="{setting('site_title')}"></a></span></div>
+        <div id="Menu">
+            
+            <ul class="grid">
+                <li class="top_nav {if $is_index}current{/if}"><a href="{call index_link}" class="top_link"><span class="t">首页</span><span class="et">HOME</span></a></li>
+                {foreach menu('nav') as $level1_id => $level1}
+                {if $level1@iteration>7}{break}{/if}
+                <li class="top_nav {if $top_id==$level1_id}current{/if}">
+                    <a href="{call menu_link id=$level1_id}" class="top_link"><span class="t" style="top: 0px;">{menu($level1_id, 'title')}</span><span class="et" style="top: 20px;">{menu($level1_id, 'ex_title')}</span></a>
+                    {if $level1}
+                    <div class="childNav {if menu($level1_id, 'image')}hasThumb{/if} before clearfix hidden">
+                        <div class="tbox"></div>
+                        <div class="init clearfix">
+                            <div class="nbox">
+                                <ul class="ul">
+                                    {foreach $level1 as $level2_id=>$level2}
+                                    <li><a href="{call menu_link id=$level2_id}">{menu($level2_id, 'title')}</a></li>
+                                    {/foreach}
+                                </ul>
+                            </div>
+                            {if menu($level1_id, 'image')}
+                            <div class="navThumb">
+                                <a href="{call menu_link id=$level1_id}"><img src="{$absroot}{menu($level1_id, 'image')}" alt="{menu($level1_id, 'title')}"></a>
+                                <div class="text"><a href="{call menu_link id=$level1_id}">{menu($level1_id, 'title')}</a></div>
+                            </div>
+                            {/if}
+                        </div>
+                    </div>
+                    {/if}
+                </li>
+                {/foreach}
+            </ul>
+        </div>
+        <script type="text/javascript">
+            $('#Menu').find('li.top_nav').hover(function() {
+                $(this).find('.top_link').find('span.t').stop(true, true).animate({
+                    'top': 20
+                }, 200).end().find('span.et').stop(true, true).delay(50).animate({
+                    'top': 0
+                }, 200).end().end().find('.childNav').stop(true, true).slideDown(200, function() {
+                    $(this).find('.navThumb').hide().show()
+                })
+            }, function() {
+                $(this).find('.top_link').find('span.t').stop(true, true).delay(50).animate({
+                    'top': 0
+                }, 200).end().find('span.et').stop(true, true).animate({
+                    'top': 20
+                }, 200).end().end().find('.childNav').stop(true, true).slideUp(200)
+            })
+        </script>
+        <div class="clear"></div>
+    </div>
+</div>    
+{/block}
+
+{block name="foot"}
+<div class="bgWrap" id="footMenu">
+    <div class="wrap">
+        {foreach menu('nav') as $level1_id => $level1}
+        {if $level1@iteration>7}{break}{/if}
+        <div class="each">
+            <h2 class="reset"><a href="{call menu_link id=$level1_id}">{menu($level1_id, 'title')}</a></h2>
+            {if $level1}
+            <div class="item_con">
+                <ul class="ul">
+                    {foreach $level1 as $level2_id => $level2}
+                    <li><a href="{call menu_link id=$level2_id}">{menu($level2_id, 'title')}</a></li>
+                    {/foreach}
+                </ul>
+            </div>
+            {/if}
+        </div>
+        {/foreach}
+
+
+        <div class="ewm">
+            <div class="thumb"><img src="{$absroot}{setting('public_qrcode')}" width="100" height="100" /></div>
+            <div class="text">关注我们了解更多</div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="bgWrap" id="foot">
+    {setting('corp_title')}版权所有　{setting('site_copyright')} 　{setting('icp')}　电话：{setting('tel')}　地址：{setting('address')}
+</div>       
+{/block}

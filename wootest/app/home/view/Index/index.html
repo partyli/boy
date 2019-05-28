@@ -1,0 +1,128 @@
+{extends file='../header_footer.html'}
+
+
+{block name=content}
+
+<div class="bgWrap" id="Banner" style="height: 500px;">
+<div class="layui-carousel" id="banner">
+  <div carousel-item>
+    {foreach $ad.index_banner.Ad as $each}
+    <div><a href="{url($each.link)}" class="coverBg" style="background-image: url({$absroot}{$each.image});"><img  src="{$absroot}{$each.image}" class="hidden" alt="{$each.title}"/></a></div>
+    {/foreach}
+  </div>
+</div>
+<script>
+layui.use('carousel', function(){
+  var carousel = layui.carousel;
+  //建造实例
+  carousel.render({
+    elem: '#banner'
+    ,width: '100%' //设置容器宽度
+    ,height:'500px'
+    //,arrow: 'always' //始终显示箭头
+    ,anim: 'fade' //切换动画方式
+  });
+});
+
+</script>
+    
+</div>
+<div class="bgWrap" id="Index">
+    <div class="wrap">
+        <div id="imgNews">
+            <a href="javascript:void(0)" class="next"><img src="http://demo1.cdphm.com/images/next.png"></a>
+            <a href="javascript:void(0)" class="prev"><img src="http://demo1.cdphm.com/images/prev.png"></a>
+            <div id="INS" >
+                <ul class="ul">
+                    {foreach get_menu_data(3, 10, ['family' => true,'where' =>[['is_verify','=', 1], ['thumb' ,'<>', '']]]) as $item}
+                    <li style="overflow: hidden; float: left; width: 276px; height: 181px;">
+                        <div class="thumb">
+                            <a href="{call view_link item=$item mdl=menu(3,'type')}"><img src="{$absroot}{$item.thumb}"></a>
+                        </div>
+                        <div class="text"><a href="{call view_link item=$item mdl=menu(3,'type')}">{$item.title}</a></div>
+                    </li>
+                    {/foreach}
+                </ul>
+                <div class="clear"></div>
+            </div>
+            <script type="text/javascript">
+                $('#INS').jCarouselLite({
+                    'speed': 300,
+                    'visible': 1,
+                    'auto': 0,
+                    'circular': true,
+                    'btnPrev': '#imgNews a.prev',
+                    'btnNext': '#imgNews a.next'
+                });
+                setInterval(function() {
+                    $('#imgNews a.next').click()
+                }, 5000)
+            </script>
+        </div>
+        
+        <div id="News">
+            <div class="item_tit">
+                <a href="{call menu_link id=3}" class="more"><img src="{$absroot}images/more.png"></a>
+                <ul class="ul hov1">
+                    {foreach menu('nav_children', 3) as $menu_id}
+                    <li class="li1"><a href="{call menu_link id=$menu_id}">{menu($menu_id, 'title')}</a></li>
+                    {/foreach}
+                </ul>
+                <div class="clear"></div>
+            </div>
+            <div class="item_con">
+                {foreach menu('nav_children', 3) as $menu_id}
+                <div class="each {if $menu_id@iteration>1}hidden{/if}" >
+                    <ul class="ul">
+                        {foreach get_menu_data($menu_id, 5, ['cache' => true,'where' =>[['is_verify','=', 1]]]) as $item}
+                        <li><span>{$item.date}</span><a href="{call view_link item=$item mdl=menu($menu_id, 'type')}">{$item.title}</a></li>
+                        {/foreach}
+                    </ul>
+                </div>
+                {/foreach}
+            </div>
+        </div>
+        <script type="text/javascript">
+            $('#News').find('.item_tit').find('li').hover(function() {
+                var index = $(this).index();
+                $('#News').find('.item_tit').find('ul').removeClass('hov1 hov2 hov3').addClass('hov' + (index + 1));
+                $('#News').find('.item_con').find('div.each:visible').hide().end().find('div.each:eq(' + index + ')').show();
+            }, jQuery.noop)
+        </script>
+        <div id="Case">
+            <div class="item_tit">
+                <a href="http://demo1.cdphm.com/Product/show/4.html" class="more"><img src="http://demo1.cdphm.com/images/more.png"></a>
+                <h2 class="reset"><a href="http://demo1.cdphm.com/Product/show/4.html">产品中心</a></h2>
+            </div>
+            <div class="item_con">
+                <a href="javascript:void(0)" class="next btn"><img src="http://demo1.cdphm.com/images/next1.png"></a>
+                <a href="javascript:void(0)" class="prev btn"><img src="http://demo1.cdphm.com/images/prev1.png"></a>
+                <div id="caseScroll" >
+                    <ul class="ul" >
+                        {foreach get_menu_data(4, 10, ['family' => true,'where' =>[['is_verify','=', 1], ['thumb' ,'<>', '']]]) as $item}
+                        <li>
+                            <div class="thumb">
+                                <a href="{call view_link item=$item mdl=menu(4,'type')}"><img src="{$absroot}{$item.thumb}"></a>
+                            </div>
+                            <div class="text"><a href="{call view_link item=$item mdl=menu(4,'type')}">{$item.title}</a></div>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+                <script type="text/javascript">
+                    $('#caseScroll').jCarouselLite({
+                        'speed': 300,
+                        'visible': 1,
+                        'auto': 0,
+                        'circular': false,
+                        'btnPrev': '#Case a.prev',
+                        'btnNext': '#Case a.next'
+                    });
+                </script>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+{/block}

@@ -1,0 +1,105 @@
+{extends file="header_footer.html"} 
+
+{block name=content}
+<div class="layui-carousel" id="banner">
+  <div carousel-item>
+    {foreach $ad.$ad_var.Ad as $each}
+    <div><a href="{url($each.link)}" class="coverBg" style="background-image: url({$absroot}{$each.image});"><img  src="{$absroot}{$each.image}" class="hidden" alt="{$each.title}"/></a></div>
+    {/foreach}
+  </div>
+</div>
+<script>
+layui.use('carousel', function(){
+  var carousel = layui.carousel;
+  //建造实例
+  carousel.render({
+    elem: '#banner'
+    ,width: '100%' //设置容器宽度
+    ,height:'300px'
+    //,arrow: 'always' //始终显示箭头
+    ,anim: 'fade' //切换动画方式
+  });
+});
+
+</script>
+
+{*
+<div  class="wrap" >
+    <div id="insiderBase">
+        {block name="insider_bar"}
+        <div id="insiderBar">
+            <h2 class="reset">{$menu_data.title}</h2>
+            <ul class="list">
+                {foreach $side_menu.menus as $menu_id}
+                <li class="{if $menu_id==$menu_data.id}current{/if}"><a href="{call menu_link id=$menu_id}">{menu($menu_id,'title')}</a></li>
+                {/foreach}
+            </ul>
+        </div>
+        {/block}
+        
+        {block name="insider_content"}
+        <div id="insider_content">
+            <div class="location">{include file="Common/path.html" delimiter=' &gt; '}</div>
+            <div id="insider">
+                {block name=insider}{/block}
+            </div>
+        </div>
+        {/block}
+    </div>
+</div>
+*}
+
+<div id="insiderCon" class="bgWrap">
+    <div class="wrap">
+        <div id="adhere">
+            <span class="here">{include file="Common/path.html" delimiter=' &gt; '}</div>
+        <div id="sideLeft">
+            <h2 class="reset side_title">
+                <span class="t">{menu($side_menu.top_menu,'title')}</span>
+                <span class="et">{menu($side_menu.top_menu,'ex_title')}</span>
+            </h2>
+            <div class="side_menu">
+                <ul class="ul">
+                    {foreach $side_menu.menus as $menu_id}
+                    <li class="{if $menu_id==$menu_data.id}current{/if}">
+                        <a href="{call menu_link id=$menu_id}">
+                            <span class="before">{menu($menu_id,'title')}</span>
+                            <span class="after">{menu($menu_id,'title')}<i></i></span>
+                        </a>
+                    </li>
+                    {/foreach}
+                </ul>
+                <div class="clear"></div>
+            </div>
+            <a class="notice" href="{call menu_link id=2}">
+                <i></i>
+                <span class="t">通知公告</span>
+                <span class="et">Notice</span>
+            </a>
+            <div class="contact">
+                <i></i>
+                <span class="t">热线电话</span>
+                <span class="et">{setting('tel')}</span>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $('.side_menu').find('li').not('.current').hover(function() {
+                $(this).find('a').stop(true, true).animate({
+                    'left': -112
+                }, 300)
+            }, function() {
+                $(this).find('a').stop(true, true).animate({
+                    'left': 0
+                }, 300)
+            })
+        </script>
+        <div id="sideRight">
+            <div id="insider">
+            {block name=insider}{/block}
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+{/block}
